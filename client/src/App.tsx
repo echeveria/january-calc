@@ -16,14 +16,18 @@ interface ICashBack {
     EUR: number;
 }
 
+const defaultPayment: IPayment = {
+    price: 0.0,
+    priceCurrency: "BGN",
+    cash: 0.0,
+    cashCurrency: "BGN",
+};
+
+const defaultCashBack: ICashBack = { BGN: 0.0, EUR: 0.0 };
+
 function App() {
-    const [payment, setPayment] = useState<IPayment>({
-        price: 0.0,
-        priceCurrency: "BGN",
-        cash: 0.0,
-        cashCurrency: "BGN",
-    });
-    const [cashBack, setCashBack] = useState<ICashBack>({ BGN: 0.0, EUR: 0.0 });
+    const [payment, setPayment] = useState<IPayment>(defaultPayment);
+    const [cashBack, setCashBack] = useState<ICashBack>(defaultCashBack);
     const [hasSelected, setHasSelected] = useState(false);
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -54,9 +58,23 @@ function App() {
         setCashBack({ BGN: changeBGN, EUR: changeEUR });
     }, [payment]);
 
+    const isChanged = JSON.stringify(cashBack) !== JSON.stringify(defaultCashBack);
+
     return (
-        <div className="mx-auto mt-6 w-full max-w-sm rounded-2xl border border-gray-200 bg-white p-4 shadow-md">
-            <h1 className="mb-3 text-center text-lg font-semibold text-gray-800">
+        <div className="relative mx-auto mt-6 w-full max-w-sm rounded-2xl border border-gray-200 bg-white p-4 shadow-md">
+            {isChanged && (
+                <button
+                    className="absolute top-2 right-2 rounded-2xl border border-gray-200 bg-white px-3 py-1 shadow-md"
+                    type="reset"
+                    onClick={() => {
+                        setPayment(defaultPayment);
+                        setCashBack(defaultCashBack);
+                    }}
+                >
+                    Изчисти
+                </button>
+            )}
+            <h1 className="mt-8 mb-4 text-center text-lg font-semibold text-gray-800">
                 Януарски калкулатор
             </h1>
             <div className="m-4">
@@ -66,9 +84,6 @@ function App() {
                     </label>
                     <div className="mt-2">
                         <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
-                            <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">
-                                $
-                            </div>
                             <input
                                 id="price"
                                 name="price"
@@ -118,9 +133,6 @@ function App() {
                         </label>
                         <div className="mt-2">
                             <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
-                                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">
-                                    $
-                                </div>
                                 <input
                                     id="price"
                                     name="cash"
