@@ -3,6 +3,7 @@ import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
+    base: "/january-calc/",
     plugins: [
         react(),
         VitePWA({
@@ -30,5 +31,4 @@ export default defineConfig({
             },
         }),
     ],
-    base: "/january-calc/",
 });
